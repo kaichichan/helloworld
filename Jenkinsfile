@@ -7,6 +7,19 @@ pipeline {
         IMAGE_TAG = "${env.BUILD_NUMBER}" 
     }
     stages {
+        stage('Checkout') {
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/dev']],
+                    extensions: [],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/kaichichan/helloworld.git',
+                        credentialsId: 'git-creds'
+                    ]]
+                ])
+            }
+        }
         stage('Build and Push') {
             steps {
                 script {
