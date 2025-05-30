@@ -14,7 +14,7 @@ spec:
         app: helloworld-ui
     spec:
       containers:
-      - image: kaichichan1/helloworld:5
+      - image: kaichichan1/helloworld:6
         name: helloworld-ui
         ports:
         - containerPort: 80
