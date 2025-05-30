@@ -1,0 +1,20 @@
+iapiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helloworld-ui
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: helloworld-ui
+  template:
+    metadata:
+      labels:
+        app: helloworld-ui
+    spec:
+      containers:
+      - image: kaichichan1/hellowold:5
+        name: helloworld-ui
+        ports:
+        - containerPort: 80
