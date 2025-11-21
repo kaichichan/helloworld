@@ -5,10 +5,7 @@ pipeline {
         APP_NAME = "helloworld"
         // Uses BUILD_NUMBER provided by Jenkins
         IMAGE_TAG = "${env.BUILD_NUMBER}"
-        
-        APP_NAME = 'helloworld'
-        IMAGE_TAG = "latest"
-        KUBE_DEPLOYMENT_FILE = 'deployment.yaml'   
+        KUBE_DEPLOYMENT_FILE = 'deployment.yaml'
 }
     stages {
         stage('Checkout') {
@@ -27,9 +24,11 @@ pipeline {
         stage('Build and Push') {
             steps {
                 script {
-                    docker.build("${DOCKER_REGISTRY}/${APP_NAME}:${IMAGE_TAG}")
+                    def dockerImage = docker.build("${DOCKER_REGISTRY}/${APP_NAME}:${IMAGE_TAG}")
+                    dockerImage.tag("${DOCKER_REGISTRY}/${APP_NAME}:latest")
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
                         docker.image("${DOCKER_REGISTRY}/${APP_NAME}:${IMAGE_TAG}").push()
+			docker.image("${DOCKER_REGISTRY}/${APP_NAME}:latest").push()
                     }
                 }
             }
