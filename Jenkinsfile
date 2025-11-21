@@ -7,7 +7,7 @@ pipeline {
         // Uses BUILD_NUMBER provided by Jenkins
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         KUBE_DEPLOYMENT_FILE = 'deployment.yaml'
-        NAMESPACE= 'default'
+        NAMESPACE= 'helloworld'
     }
 
     stages {
