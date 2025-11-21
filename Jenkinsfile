@@ -26,10 +26,9 @@ pipeline {
         stage('Build and Push') {
             steps {
                 script {
-                    def dockerImage = docker.build("${DOCKER_REGISTRY}/${APP_NAME}:${IMAGE_TAG}")
-                    dockerImage.tag("${APP_NAME}:latest")
+                    docker.build("${DOCKER_REGISTRY}/${APP_NAME}:latest")
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
-                        docker.image("${DOCKER_REGISTRY}/${APP_NAME}:${IMAGE_TAG}").push()
+                        //docker.image("${DOCKER_REGISTRY}/${APP_NAME}:${IMAGE_TAG}").push()
 			docker.image("${DOCKER_REGISTRY}/${APP_NAME}:latest").push()
                     }
                 }
