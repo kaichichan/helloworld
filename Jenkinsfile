@@ -7,6 +7,7 @@ pipeline {
         // Uses BUILD_NUMBER provided by Jenkins
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         KUBE_DEPLOYMENT_FILE = 'deployment.yaml'
+        NAMESPACE= 'default'
     }
 
     stages {
@@ -37,9 +38,6 @@ pipeline {
         stage('Apply Kubernetes Manifest') {
             steps {
                 script {
-                    // set the active namespace for the deployment
-                    sh 'kubectl config set-context --current --namespace=default'
-
                     // 1. Ensure kubectl is correctly configured on the agent.
                     // If you mounted the ~/.kube/config file, it should work.
                     // You can run 'kubectl config current-context' to verify.
@@ -49,11 +47,11 @@ pipeline {
                     // 2. Apply the deployment manifest.
                     // This command uses the locally built image.
                     echo "Applying Kubernetes manifest..."
-                    sh "kubectl apply -f ${KUBE_DEPLOYMENT_FILE}"
+                    sh "kubectl apply -f ${KUBE_DEPLOYMENT_FILE}" -n ${NAMESPACE}
 
                     // 3. Wait for the deployment to roll out successfully.
                     echo "Waiting for deployment rollout..."
-                    sh "kubectl rollout status deployment/${APP_NAME}-deployment --timeout=300s"
+                    sh "kubectl rollout status deployment/${APP_NAME}-deployment --timeout=300s -n ${NAMESPACE}"
                 }
             }
         }
