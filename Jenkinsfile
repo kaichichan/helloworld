@@ -37,6 +37,9 @@ pipeline {
         stage('Apply Kubernetes Manifest') {
             steps {
                 script {
+                    // set the active namespace for the deployment
+                    sh 'kubectl config set-context --current --namespace=default'
+
                     // 1. Ensure kubectl is correctly configured on the agent.
                     // If you mounted the ~/.kube/config file, it should work.
                     // You can run 'kubectl config current-context' to verify.
