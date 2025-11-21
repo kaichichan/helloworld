@@ -47,7 +47,7 @@ pipeline {
                     // 2. Apply the deployment manifest.
                     // This command uses the locally built image.
                     echo "Applying Kubernetes manifest..."
-                    sh "kubectl apply -f ${KUBE_DEPLOYMENT_FILE}" -n ${NAMESPACE}
+                    sh "kubectl apply -f ${KUBE_DEPLOYMENT_FILE} -n ${NAMESPACE}"
 
                     // 3. Wait for the deployment to roll out successfully.
                     echo "Waiting for deployment rollout..."
