@@ -27,11 +27,13 @@ pipeline {
         stage('Build and Push') {
             steps {
                 script {
-                    docker.build("${DOCKER_REGISTRY}/${APP_NAME}:latest")
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
+                    def ImageRef = docker.build("${DOCKER_REGISTRY}/${APP_NAME}:latest")
+                    ImageRef.push()
+
+                    //docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
                         //docker.image("${DOCKER_REGISTRY}/${APP_NAME}:${IMAGE_TAG}").push()
-			docker.image("${DOCKER_REGISTRY}/${APP_NAME}:latest").push()
-                    }
+			//docker.image("${DOCKER_REGISTRY}/${APP_NAME}:latest").push()
+                    //}
                 }
             }
         }
