@@ -1,12 +1,14 @@
 pipeline {
     agent any
+
     environment {
         DOCKER_REGISTRY = "kaichichan1"
         APP_NAME = "helloworld"
         // Uses BUILD_NUMBER provided by Jenkins
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         KUBE_DEPLOYMENT_FILE = 'deployment.yaml'
-}
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -25,7 +27,7 @@ pipeline {
             steps {
                 script {
                     def dockerImage = docker.build("${DOCKER_REGISTRY}/${APP_NAME}:${IMAGE_TAG}")
-                    dockerImage.tag("${DOCKER_REGISTRY}/${APP_NAME}:latest")
+                    dockerImage.tag("${APP_NAME}:latest")
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
                         docker.image("${DOCKER_REGISTRY}/${APP_NAME}:${IMAGE_TAG}").push()
 			docker.image("${DOCKER_REGISTRY}/${APP_NAME}:latest").push()
