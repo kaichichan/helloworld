@@ -5,7 +5,9 @@ pipeline {
         DOCKER_REGISTRY = "kaichichan1"
         APP_NAME = "helloworld"
         // Uses BUILD_NUMBER provided by Jenkins
-        IMAGE_TAG = "${env.BUILD_NUMBER}"
+        // IMAGE_TAG = "${env.BUILD_NUMBER}"
+        GIT_COMMIT_SHORT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+        GIT_BRANCH = env.BRANCH_NAME
         KUBE_DEPLOYMENT_FILE = 'deployment.yaml'
         NAMESPACE= 'helloworld'
     }
@@ -27,8 +29,12 @@ pipeline {
         stage('Build and Push') {
             steps {
                 script {
-                    def ImageRef = docker.build("${DOCKER_REGISTRY}/${APP_NAME}:latest")
+                    //def ImageRef = docker.build("${DOCKER_REGISTRY}/${APP_NAME}:latest")
+                    def ImageRef = docker.build("${DOCKER_REGISTRY}/${APP_NAME}:${GIT_BRANCH}-${GIT_COMMIT_SHORT}")
                     ImageRef.push()
+
+                    // Also push as latest
+                    ImageRef.push('latest')
 
                     //docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
                         //docker.image("${DOCKER_REGISTRY}/${APP_NAME}:${IMAGE_TAG}").push()
