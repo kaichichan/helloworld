@@ -7,7 +7,7 @@ pipeline {
         // Uses BUILD_NUMBER provided by Jenkins
         // IMAGE_TAG = "${env.BUILD_NUMBER}"
         GIT_COMMIT_SHORT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
-        GIT_BRANCH = env.BRANCH_NAME
+        GIT_BRANCH = ${env.BRANCH_NAME}
         KUBE_DEPLOYMENT_FILE = 'deployment.yaml'
         NAMESPACE= 'helloworld'
     }
