@@ -7,7 +7,6 @@ pipeline {
         // Uses BUILD_NUMBER provided by Jenkins
         // IMAGE_TAG = "${env.BUILD_NUMBER}"
         GIT_COMMIT_SHORT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
-        GIT_BRANCH = "${env.BRANCH_NAME}"
         KUBE_DEPLOYMENT_FILE = 'deployment.yaml'
         NAMESPACE= 'helloworld'
     }
@@ -30,7 +29,7 @@ pipeline {
             steps {
                 script {
                     //def ImageRef = docker.build("${DOCKER_REGISTRY}/${APP_NAME}:latest")
-                    def ImageRef = docker.build("${DOCKER_REGISTRY}/${APP_NAME}:${GIT_BRANCH}-${GIT_COMMIT_SHORT}")
+                    def ImageRef = docker.build("${DOCKER_REGISTRY}/${APP_NAME}:${GIT_COMMIT_SHORT}")
                     ImageRef.push()
 
                     // Also push as latest
